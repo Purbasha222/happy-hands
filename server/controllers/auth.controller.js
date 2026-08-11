@@ -35,15 +35,23 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+
     if (!user) return res.status(400).json({ message: "User not found" });
+
+    const userResponse = await User.findById(user._id).select("-password");
     const isMatch = await user.matchPassword(password);
+
     if (!isMatch) {
       return res.status(500).json({ message: "Passwords does not match!" });
     }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
-    return res.status(200).json({ message: "Login successful", token });
+
+    return res
+      .status(200)
+      .json({ message: "Login successful", token, user: userResponse });
   } catch (error) {
     res.status(500).json({ message: "Error", error });
   }
