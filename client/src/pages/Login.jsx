@@ -1,26 +1,18 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import api from "../utils/api";
-import { login } from "../redux/slices/authSlice";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { login } from "../redux/slices/authSlice";
 
-const Signup = () => {
-  const [name, setName] = useState("");
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("customer");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     try {
       e.preventDefault();
-      const res = await api.post("/auth/register", {
-        name,
-        email,
-        password,
-        role,
-      });
+      const res = await api.post("/auth/login", { email, password });
       dispatch(login({ token: res.data.token, user: res.data.user }));
       navigate("/");
     } catch (e) {
@@ -30,20 +22,12 @@ const Signup = () => {
   return (
     <div className="min-h-screen flex flex-col justify-center items-center">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         className="flex flex-col border border-amber-600 p-5 w-1/4 gap-3 rounded-md"
       >
         <div>
-          <h2 className="font-bold text-2xl">Signup</h2>
+          <h2 className="font-bold text-2xl">Login</h2>
         </div>
-        <label className="font-semibold text-md">Your name</label>
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="p-2 border border-amber-600 rounded-sm"
-        />
 
         <label className="font-semibold text-md">Your Email</label>
         <input
@@ -62,21 +46,10 @@ const Signup = () => {
           className="p-2 border border-amber-600 rounded-sm"
         />
 
-        <label className="font-semibold text-md">Role</label>
-        <select
-          className="p-2 border border-amber-600 rounded-sm"
-          value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          <option value="customer">Customer</option>
-          <option value="caretaker">Caretaker</option>
-        </select>
-
-        <button type="submit">Submit</button>
+        <button type="submit">Login</button>
       </form>
-      <span>Already a user?</span>
     </div>
   );
 };
 
-export default Signup;
+export default Login;
