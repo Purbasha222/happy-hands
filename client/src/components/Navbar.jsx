@@ -1,4 +1,10 @@
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../redux/slices/authSlice";
 const Navbar = () => {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   return (
     <nav className="relative z-20 flex items-center justify-between px-[7%] py-7">
       {/* LOGO */}
@@ -52,6 +58,18 @@ const Navbar = () => {
       <button className="rounded-full bg-[#E58B57] px-7 py-3 text-sm font-semibold text-white shadow-lg transition hover:scale-105">
         Book Now
       </button>
+      {isAuthenticated ? (
+        <>
+          <button onClick={() => dispatch(logout())}>Logout</button>{" "}
+          <div className="h-12 w-12 text-white rounded-full bg-amber-600 flex items-center justify-center">
+            {user?.name?.charAt(0)}
+          </div>
+        </>
+      ) : (
+        <>
+          <Link to="/login">Login</Link> <Link to="/signup">Signup</Link>
+        </>
+      )}
     </nav>
   );
 };

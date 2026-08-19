@@ -8,6 +8,7 @@ const Signup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [role, setRole] = useState("customer");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
+      setError("");
       const res = await api.post("/auth/register", {
         name,
         email,
@@ -24,7 +26,7 @@ const Signup = () => {
       dispatch(login({ token: res.data.token, user: res.data.user }));
       navigate("/");
     } catch (e) {
-      console.log(e);
+      setError(e.response.data.message);
     }
   };
   return (
@@ -71,7 +73,7 @@ const Signup = () => {
           <option value="customer">Customer</option>
           <option value="caretaker">Caretaker</option>
         </select>
-
+        {error && <p className="text-red-500">{error}</p>}
         <button type="submit">Submit</button>
       </form>
       <span>Already a user?</span>

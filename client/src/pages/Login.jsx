@@ -7,16 +7,18 @@ import { login } from "../redux/slices/authSlice";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogin = async (e) => {
     try {
       e.preventDefault();
+      setError("");
       const res = await api.post("/auth/login", { email, password });
       dispatch(login({ token: res.data.token, user: res.data.user }));
       navigate("/");
     } catch (e) {
-      console.log(e);
+      setError(e.response.data.message);
     }
   };
   return (
@@ -45,6 +47,7 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="p-2 border border-amber-600 rounded-sm"
         />
+        {error && <p className="text-red-500">{error}</p>}
 
         <button type="submit">Login</button>
       </form>
