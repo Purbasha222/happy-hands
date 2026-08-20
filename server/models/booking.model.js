@@ -12,7 +12,7 @@ const bookingSchema = new mongoose.Schema(
       ref: "caretaker",
       required: true,
     },
-    careType: { type: String },
+    careType: { type: String, enum: ["child", "adult", "pet"] },
     bookingType: { type: String, enum: ["scheduled", "urgent"] },
     shift: {
       type: String,

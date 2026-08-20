@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import CaretakerCard from "../components/CaretakerCard";
+import BookingModal from "../components/BookingModal";
 
 const CaretakerListing = () => {
   const [caretakers, setCaretakers] = useState([]);
   const [error, setError] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [selectedCaretaker, setSelectedCaretaker] = useState(null);
   useEffect(() => {
     (async () => {
       try {
@@ -16,6 +19,11 @@ const CaretakerListing = () => {
       }
     })();
   }, []);
+
+  const handleBookClick = (caretaker) => {
+    setSelectedCaretaker(caretaker);
+    setOpenModal(true);
+  };
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       {error && <p>{error}</p>}
@@ -34,8 +42,14 @@ const CaretakerListing = () => {
           rating={caretaker.rating}
           totalReviews={caretaker.totalReviews}
           skills={caretaker.skills}
+          onBookClick={() => handleBookClick(caretaker)}
         />
       ))}
+      <BookingModal
+        selectedCaretaker={selectedCaretaker}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
     </div>
   );
 };

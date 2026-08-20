@@ -10,8 +10,8 @@ import role from "../middlewares/role.middleware.js";
 
 const route = express.Router();
 
-route.post("/", auth, role("user"), createBooking);
-route.get("/my", auth, role("user"), getMyBookings);
+route.post("/", auth, role("customer"), createBooking);
+route.get("/my", auth, role("customer"), getMyBookings);
 route.get("/caretaker", auth, role("caretaker"), getCaretakerBookings);
 route.patch(
   "/:id/status",
