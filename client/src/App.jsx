@@ -5,6 +5,8 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CaretakerListing from "./pages/CaretakerListing";
+import MyBookings from "./pages/MyBookings";
+import CaretakerBookings from "./pages/CaretakerBookings";
 
 function App() {
   return (
@@ -25,6 +27,22 @@ function App() {
         element={
           <ProtectedRoute>
             <CaretakerListing />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bookings/my"
+        element={
+          <ProtectedRoute>
+            <MyBookings />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/bookings/caretaker"
+        element={
+          <ProtectedRoute>
+            <CaretakerBookings />
           </ProtectedRoute>
         }
       />

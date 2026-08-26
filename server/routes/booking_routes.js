@@ -16,7 +16,7 @@ route.get("/caretaker", auth, role("caretaker"), getCaretakerBookings);
 route.patch(
   "/:id/status",
   auth,
-  role("user", "caretaker"),
+  role("customer", "caretaker"),
   updateBookingStatus,
 );
 

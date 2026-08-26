@@ -64,6 +64,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
               Care Type
             </label>
             <select
+              required
               name="careType"
               value={formData.careType}
               onChange={handleChange}
@@ -81,6 +82,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
               Booking Type
             </label>
             <select
+              required
               name="bookingType"
               value={formData.bookingType}
               onChange={handleChange}
@@ -97,6 +99,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
               Shift
             </label>
             <select
+              required
               name="shift"
               value={formData.shift}
               onChange={handleChange}
@@ -116,6 +119,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
                 Start Date
               </label>
               <input
+                required
                 type="date"
                 name="startDate"
                 value={formData.startDate}
@@ -128,6 +132,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
                 End Date
               </label>
               <input
+                required
                 type="date"
                 name="endDate"
                 value={formData.endDate}
@@ -142,6 +147,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
               Address
             </label>
             <input
+              required
               name="address"
               value={formData.address}
               onChange={handleChange}
@@ -155,6 +161,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
               City
             </label>
             <input
+              required
               name="city"
               value={formData.city}
               onChange={handleChange}
