@@ -29,6 +29,8 @@ const MyBookings = () => {
           bookingType={booking.bookingType}
           shift={booking.shift}
           startDate={booking.startDate}
+          startTime={booking.startTime}
+          endTime={booking.endTime}
           endDate={booking.endDate}
           address={booking.address}
           city={booking.city}

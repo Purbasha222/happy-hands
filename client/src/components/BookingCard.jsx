@@ -12,6 +12,8 @@ const BookingCard = ({
   shift,
   startDate,
   endDate,
+  startTime,
+  endTime,
   address,
   city,
   status,
@@ -57,6 +59,9 @@ const BookingCard = ({
       <div className="font-['IBM_Plex_Mono'] text-[13px] text-[#3A2E27] mb-3">
         <p className="m-0">
           {formatDate(startDate)} → {formatDate(endDate)}
+        </p>
+        <p className="m-0">
+          {startTime} - {endTime}
         </p>
       </div>
 

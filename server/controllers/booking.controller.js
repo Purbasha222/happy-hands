@@ -45,9 +45,9 @@ export const createBooking = async (req, res) => {
     const urgentRate = caretaker.urgentRate;
     const days =
       (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
+    const totalDays = days + 1;
     const totalAmount =
-      Math.max(days, 1) *
-      (bookingType === "scheduled" ? dailyRate : urgentRate);
+      totalDays * (bookingType === "scheduled" ? dailyRate : urgentRate);
 
     const finalStartTime = startTime || shiftDefaults[shift].startTime;
     const finalEndTime = endTime || shiftDefaults[shift].endTime;

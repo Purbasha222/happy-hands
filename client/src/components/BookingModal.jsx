@@ -8,6 +8,8 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
     shift: "",
     startDate: "",
     endDate: "",
+    startTime: "",
+    endTime: "",
     address: "",
     city: "",
     specialInstructions: "",
@@ -142,6 +144,33 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+                Start Time
+              </label>
+              <input
+                type="time"
+                name="startTime"
+                value={formData.startTime}
+                onChange={handleChange}
+                className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+                End Time
+              </label>
+              <input
+                type="time"
+                name="endTime"
+                value={formData.endTime}
+                onChange={handleChange}
+                className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              />
+            </div>
+          </div>
+
           <div>
             <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
               Address
@@ -186,7 +215,11 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
 
           <div className="flex justify-between items-baseline pt-2 border-t border-dashed border-[#3A2E27]/15">
             <span className="text-xs text-[#3A2E27]/60">
-              ₹{selectedCaretaker.dailyRate}/day
+              ₹
+              {formData.bookingType === "urgent"
+                ? selectedCaretaker.urgentRate
+                : selectedCaretaker.dailyRate}
+              /day
             </span>
             <button
               type="submit"

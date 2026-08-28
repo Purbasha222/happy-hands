@@ -86,9 +86,15 @@ const CaretakerCard = ({
           ₹{urgentRate}
           <small className="font-normal text-[11px] opacity-60">/urgent</small>
         </span>
+
         <button
           onClick={onBookClick}
-          className="rounded-full bg-[#2F5D5A] text-white p-2 mt-2"
+          className={
+            isAvailable
+              ? "rounded-full bg-[#2F5D5A] text-white p-2 mt-2 cursor-pointer"
+              : "rounded-full p-2 mt-2 bg-gray-300 text-gray-500 cursor-not-allowed"
+          }
+          disabled={!isAvailable}
         >
           Book now
         </button>
