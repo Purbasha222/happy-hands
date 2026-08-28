@@ -12,6 +12,8 @@ const CaretakerBookingCard = ({
   shift,
   startDate,
   endDate,
+  startTime,
+  endTime,
   address,
   city,
   status,
@@ -24,6 +26,7 @@ const CaretakerBookingCard = ({
     confirmed: "bg-green-100 text-green-700",
     completed: "bg-blue-100 text-blue-700",
     cancelled: "bg-red-100 text-red-700",
+    "auto-cancelled": "bg-gray-100 text-gray-600",
   };
   return (
     <div className="bg-[#FBF3E7] text-[#3A2E27] rounded-[18px] p-5 shadow-[0_6px_20px_rgba(58,46,39,0.08)] max-w-md w-full">
@@ -59,6 +62,9 @@ const CaretakerBookingCard = ({
         <p className="m-0">
           {formatDate(startDate)} → {formatDate(endDate)}
         </p>
+        <p className="m-0">
+          {startTime} - {endTime}
+        </p>
       </div>
 
       <div className="text-sm text-[#3A2E27]/80 mb-3">
@@ -79,14 +85,22 @@ const CaretakerBookingCard = ({
           ₹{totalAmount}
         </span>
       </div>
-      <div className="flex justify-around items-center mt-4">
-        <button className="p-2 rounded-xl border border-[#2F5D5A] text-[#2F5D5A] text-xl">
-          <span>✅</span>Accept
-        </button>
-        <button className="p-2 rounded-xl border border-[#3A2E27] text-[#3A2E27] text-xl">
-          <span>❌</span>Decline
-        </button>
-      </div>
+      {status === "pending" && (
+        <div className="flex justify-around items-center mt-4">
+          <button
+            onClick={() => onStatusChange("confirmed")}
+            className="p-2 rounded-xl border border-[#2F5D5A] text-[#2F5D5A] text-xl"
+          >
+            <span>✅</span>Accept
+          </button>
+          <button
+            onClick={() => onStatusChange("cancelled")}
+            className="p-2 rounded-xl border border-[#3A2E27] text-[#3A2E27] text-xl"
+          >
+            <span>❌</span>Decline
+          </button>
+        </div>
+      )}
     </div>
   );
 };

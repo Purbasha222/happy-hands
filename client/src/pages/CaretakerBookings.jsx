@@ -21,6 +21,11 @@ const CaretakerBookings = () => {
       const res = await api.patch(`/bookings/${bookingId}/status`, {
         status: newStatus,
       });
+      setBooking((prev) =>
+        prev.map((item) =>
+          item._id === bookingId ? { ...item, status: newStatus } : item,
+        ),
+      );
     } catch (e) {
       setError(e.response?.data?.message || "Something went wrong");
     }
@@ -38,6 +43,8 @@ const CaretakerBookings = () => {
           shift={booking.shift}
           startDate={booking.startDate}
           endDate={booking.endDate}
+          startTime={booking.startTime}
+          endTime={booking.endTime}
           address={booking.address}
           city={booking.city}
           status={booking.status}

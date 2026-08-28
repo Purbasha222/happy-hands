@@ -1,6 +1,13 @@
 import Caretaker from "../models/caretaker.model.js";
 import Booking from "../models/booking.model.js";
 
+const shiftDefaults = {
+  "full-day": { startTime: "09:00 AM", endTime: "05:00 PM" },
+  "full-night": { startTime: "07:00 PM", endTime: "07:00 AM" },
+  afternoon: { startTime: "12:00 PM", endTime: "05:00 PM" },
+  evening: { startTime: "05:00 PM", endTime: "09:00 PM" },
+};
+
 export const createBooking = async (req, res) => {
   try {
     const {
@@ -9,26 +16,50 @@ export const createBooking = async (req, res) => {
       shift,
       startDate,
       endDate,
+      startTime,
+      endTime,
       address,
       city,
       specialInstructions,
       caretakerId,
     } = req.body;
 
+    const conflictingBooking = await Booking.findOne({
+      userId: req.user._id,
+      shift,
+      status: "confirmed",
+      startDate: { $lte: endDate },
+      endDate: { $gte: startDate },
+    });
+    if (conflictingBooking)
+      return res.status(400).json({
+        message:
+          "You already have a confirmed booking for this shift and date range.",
+      });
+
     const caretaker = await Caretaker.findById(caretakerId);
     if (!caretaker)
       return res.status(404).json({ message: "Caretaker not found!" });
 
     const dailyRate = caretaker.dailyRate;
+    const urgentRate = caretaker.urgentRate;
     const days =
       (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
-    const totalAmount = days * dailyRate;
+    const totalAmount =
+      Math.max(days, 1) *
+      (bookingType === "scheduled" ? dailyRate : urgentRate);
+
+    const finalStartTime = startTime || shiftDefaults[shift].startTime;
+    const finalEndTime = endTime || shiftDefaults[shift].endTime;
+
     const booking = await Booking.create({
       careType,
       bookingType,
       shift,
       startDate,
       endDate,
+      startTime: finalStartTime,
+      endTime: finalEndTime,
       address,
       city,
       specialInstructions,
@@ -92,6 +123,17 @@ export const updateBookingStatus = async (req, res) => {
       await Caretaker.findByIdAndUpdate(booking.caretakerId, {
         isAvailable: false,
       });
+      await Booking.updateMany(
+        {
+          userId: booking.userId,
+          shift: booking.shift,
+          status: "pending",
+          _id: { $ne: booking._id },
+          startDate: { $lte: booking.endDate },
+          endDate: { $gte: booking.startDate },
+        },
+        { status: "auto-cancelled" },
+      );
     } else if (status === "completed" || status === "cancelled") {
       await Caretaker.findByIdAndUpdate(booking.caretakerId, {
         isAvailable: true,

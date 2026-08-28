@@ -29,6 +29,7 @@ const caretakerSchema = new mongoose.Schema(
     isVerified: { type: Boolean, default: false },
     bio: { type: String },
     experience: { type: Number, default: 0 },
+    phoneNumber: { type: String },
   },
   { timestamps: true },
 );

@@ -25,12 +25,22 @@ const Navbar = () => {
           Find Care
         </a>
 
-        <a
-          href="#"
-          className="text-[16px] font-medium text-[#5F4637] transition hover:text-[#E58B57]"
-        >
-          Become a Caretaker
-        </a>
+        {isAuthenticated &&
+          (user?.role === "caretaker" ? (
+            <Link
+              to="/bookings/caretaker"
+              className="text-[16px] font-medium text-[#5F4637] transition hover:text-[#E58B57]"
+            >
+              Booking requests
+            </Link>
+          ) : (
+            <Link
+              to="/bookings/my"
+              className="text-[16px] font-medium text-[#5F4637] transition hover:text-[#E58B57]"
+            >
+              My Bookings
+            </Link>
+          ))}
       </div>
 
       {/* BUTTON */}
