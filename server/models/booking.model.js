@@ -20,8 +20,8 @@ const bookingSchema = new mongoose.Schema(
     },
     startDate: { type: Date, required: true },
     endDate: { type: Date, required: true },
-    startTime: { type: String, default: "09:00 AM" },
-    endTime: { type: String, default: "09:00 PM" },
+    startTime: { type: String, default: "09:00" },
+    endTime: { type: String, default: "21:00" },
     address: { type: String, required: true },
     city: { type: String, required: true },
     status: {

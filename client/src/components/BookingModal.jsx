@@ -1,6 +1,13 @@
 import { useState } from "react";
 import api from "../utils/api";
 
+const shiftDefaults = {
+  "full-day": { startTime: "09:00", endTime: "17:00" },
+  "full-night": { startTime: "19:00", endTime: "07:00" },
+  afternoon: { startTime: "12:00", endTime: "17:00" },
+  evening: { startTime: "17:00", endTime: "21:00" },
+};
+
 const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
   const [formData, setFormData] = useState({
     careType: "",
@@ -154,6 +161,8 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
                 name="startTime"
                 value={formData.startTime}
                 onChange={handleChange}
+                min={shiftDefaults[formData.shift]?.startTime}
+                max={shiftDefaults[formData.shift]?.endTime}
                 className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
               />
             </div>
@@ -166,6 +175,8 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
                 name="endTime"
                 value={formData.endTime}
                 onChange={handleChange}
+                min={shiftDefaults[formData.shift]?.startTime}
+                max={shiftDefaults[formData.shift]?.endTime}
                 className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
               />
             </div>
