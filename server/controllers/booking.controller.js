@@ -48,7 +48,7 @@ export const createBooking = async (req, res) => {
     const days =
       (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
 
-    const totalDays = days + 1;
+    const totalDays = shift === "full-night" ? days : days + 1;
 
     const totalAmount =
       totalDays * (bookingType === "scheduled" ? dailyRate : urgentRate);

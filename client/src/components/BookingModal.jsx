@@ -7,6 +7,7 @@ const shiftDefaults = {
   afternoon: { startTime: "12:00", endTime: "17:00" },
   evening: { startTime: "17:00", endTime: "21:00" },
 };
+const formatDateForInput = (date) => date.toISOString().split("T")[0];
 
 const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,27 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "shift") {
+      const today = new Date();
+      const startDate = formatDateForInput(today);
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const endDate =
+        e.target.value === "full-night"
+          ? formatDateForInput(tomorrow)
+          : startDate;
+
+      setFormData({
+        ...formData,
+        shift: e.target.value,
+        startDate,
+        endDate,
+        startTime: shiftDefaults[e.target.value].startTime,
+        endTime: shiftDefaults[e.target.value].endTime,
+      });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
