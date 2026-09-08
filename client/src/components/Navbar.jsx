@@ -1,10 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/slices/authSlice";
+import api from "../utils/api";
 const Navbar = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleAvatarClick = async () => {
+    try {
+      const res = await api.get("/caretakers/profile");
+      navigate(`/caretaker-profile/${res.data.caretaker._id}`);
+    } catch (err) {
+      err.response?.data?.message || "Something went wrong";
+    }
+  };
+
   return (
     <nav className="z-20 flex items-center justify-between px-[7%] py-7">
       {/* LOGO */}
@@ -59,7 +71,10 @@ const Navbar = () => {
             >
               Logout
             </button>{" "}
-            <div className="h-12 w-12 text-white rounded-full bg-amber-600 flex items-center justify-center">
+            <div
+              className="h-12 w-12 text-white rounded-full bg-amber-600 flex items-center justify-center"
+              onClick={handleAvatarClick}
+            >
               {user?.name?.charAt(0)}
             </div>
           </>

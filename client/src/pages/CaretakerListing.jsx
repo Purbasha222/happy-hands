@@ -13,7 +13,6 @@ const CaretakerListing = () => {
       try {
         const res = await api.get("/caretakers");
         setCaretakers(res.data.caretakers);
-        console.log(res.data.caretakers);
       } catch (e) {
         setError(e.response?.data?.message || "Something went wrong");
       }

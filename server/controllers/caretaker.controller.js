@@ -1,5 +1,40 @@
 import Caretaker from "../models/caretaker.model.js";
 
+export const createCaretakerProfile = async (req, res) => {
+  try {
+    const {
+      skills,
+      careTypes,
+      availableShifts,
+      dailyRate,
+      urgentRate,
+      bio,
+      experience,
+      phoneNumber,
+    } = req.body;
+
+    const existing = await Caretaker.findOne({ userId: req.user._id });
+
+    if (existing)
+      return res.status(409).json({ message: "Caretaker already exists!" });
+
+    const caretaker = await Caretaker.create({
+      userId: req.user._id,
+      skills,
+      careTypes,
+      availableShifts,
+      dailyRate,
+      urgentRate,
+      bio,
+      experience,
+      phoneNumber,
+    });
+    return res.status(201).json({ message: "Profile created!", caretaker });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getCaretakers = async (req, res) => {
   try {
     const { city, careType, shift, isAvailable } = req.query;
@@ -28,6 +63,19 @@ export const getCaretakersById = async (req, res) => {
       "userId",
       "name avatar phone city",
     );
+    if (!caretaker)
+      return res.status(404).json({ message: "Caretaker not found" });
+    return res
+      .status(200)
+      .json({ message: "Fetched Successfully!", caretaker });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getCaretakerProfile = async (req, res) => {
+  try {
+    const caretaker = await Caretaker.findOne({ userId: req.user._id });
     if (!caretaker)
       return res.status(404).json({ message: "Caretaker not found" });
     return res

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../utils/api";
+import { useNavigate } from "react-router-dom";
 
 const shiftDefaults = {
   "full-day": { startTime: "09:00", endTime: "17:00" },
@@ -23,6 +24,7 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
     specialInstructions: "",
   });
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     if (e.target.name === "shift") {
@@ -54,8 +56,9 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
       const bookingData = { ...formData, caretakerId: selectedCaretaker._id };
       const res = await api.post("/bookings", bookingData);
       setOpenModal(false);
-    } catch (e) {
-      setError(e.response?.data?.message || "Something went wrong");
+      navigate("/bookings/my");
+    } catch (err) {
+      setError(err.response?.data?.message || "Something went wrong");
     }
   };
 

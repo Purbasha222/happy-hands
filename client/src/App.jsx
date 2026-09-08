@@ -2,11 +2,12 @@ import { Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CaretakerListing from "./pages/CaretakerListing";
 import MyBookings from "./pages/MyBookings";
 import CaretakerBookings from "./pages/CaretakerBookings";
+import CaretakerOnboarding from "./pages/CaretakerOnboarding";
+import CaretakerProfile from "./pages/CaretakerProfile";
 
 function App() {
   return (
@@ -15,10 +16,18 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
       <Route
-        path="/dashboard"
+        path="/caretaker-onboarding"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <CaretakerOnboarding />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/caretaker-profile/:id"
+        element={
+          <ProtectedRoute>
+            <CaretakerProfile />
           </ProtectedRoute>
         }
       />
