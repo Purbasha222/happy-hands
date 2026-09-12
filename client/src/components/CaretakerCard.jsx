@@ -11,9 +11,13 @@ const CaretakerCard = ({
   totalReviews,
   skills,
   onBookClick,
+  showProfileClick,
 }) => {
   return (
-    <div className="relative min-w-xl bg-[#FBF3E7] text-[#3A2E27] rounded-[18px] p-5 shadow-xl font-['Inter'] overflow-hidden">
+    <div
+      className="relative min-w-xl bg-[#FBF3E7] text-[#3A2E27] rounded-[18px] p-5 shadow-xl font-['Inter'] overflow-hidden cursor-pointer"
+      onClick={showProfileClick}
+    >
       {isVerified && (
         <span className="absolute top-3.5 -right-8 bg-[#2F5D5A] text-white text-[11px] font-semibold tracking-wide uppercase px-9 py-1 rotate-45">
           Verified
@@ -88,7 +92,10 @@ const CaretakerCard = ({
         </span>
 
         <button
-          onClick={onBookClick}
+          onClick={(e) => {
+            e.stopPropagation();
+            onBookClick();
+          }}
           className={
             isAvailable
               ? "rounded-full bg-[#2F5D5A] text-white p-2 mt-2 cursor-pointer"

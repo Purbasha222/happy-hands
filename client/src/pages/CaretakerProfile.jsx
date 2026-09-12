@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../utils/api";
+import BookingModal from "../components/BookingModal";
 
 const CaretakerProfile = () => {
   const loggedInUser = useSelector((state) => state.auth.user);
@@ -10,6 +11,7 @@ const CaretakerProfile = () => {
   const [caretaker, setCaretaker] = useState(null);
   const [error, setError] = useState();
   const [loading, setLoading] = useState(true);
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +66,8 @@ const CaretakerProfile = () => {
           ) : (
             <button
               disabled={!caretaker.isAvailable}
-              className="rounded-full bg-[#E58B57] px-6 py-2.5 text-sm font-semibold text-white shadow-md hover:scale-105 disabled:cursor-not-allowed disabled:bg-gray-300"
+              onClick={() => setOpenModal(true)}
+              className="rounded-full bg-[#E58B57] px-6 py-2.5 text-sm font-semibold text-white shadow-md hover:scale-105 cursor-pointer disabled:cursor-not-allowed disabled:bg-gray-300"
             >
               {caretaker.isAvailable ? "Book Now" : "Not Available"}
             </button>
@@ -79,10 +82,13 @@ const CaretakerProfile = () => {
           <p className="text-[#5F4637]">
             {caretaker.bio || "No bio added yet."}
           </p>
-          <p className="mt-2 text-sm text-[#5F4637]">
-            Experience: {caretaker.experience} years
-          </p>
         </div>
+
+        <div>
+          <h3 className="mb-2 font-semibold text-[#3B2416]">Experience</h3>
+          <p className="text-[#5F4637]">{caretaker.experience} years</p>
+        </div>
+
         <div>
           <h3 className="mb-2 font-semibold text-[#3B2416]">Care Types</h3>
           <div className="flex flex-wrap gap-2">
@@ -148,6 +154,11 @@ const CaretakerProfile = () => {
           </div>
         )}
       </div>
+      <BookingModal
+        selectedCaretaker={caretaker}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+      />
     </div>
   );
 };

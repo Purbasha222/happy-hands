@@ -11,10 +11,6 @@ export const registerUser = async (req, res) => {
 
     const newUser = await User.create({ name, email, password, role });
 
-    if (role === "caretaker") {
-      await Caretaker.create({ userId: newUser._id });
-    }
-
     const userResponse = await User.findById(newUser._id).select("-password");
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -42,7 +38,7 @@ export const loginUser = async (req, res) => {
     const isMatch = await user.matchPassword(password);
 
     if (!isMatch) {
-      return res.status(500).json({ message: "Passwords does not match!" });
+      return res.status(401).json({ message: "Passwords does not match!" });
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {

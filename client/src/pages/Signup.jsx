@@ -24,7 +24,7 @@ const Signup = () => {
         role,
       });
       dispatch(login({ token: res.data.token, user: res.data.user }));
-      navigate("/");
+      navigate(role === "caretaker" ? "/caretaker-onboarding" : "/");
     } catch (e) {
       setError(e.response.data.message);
     }

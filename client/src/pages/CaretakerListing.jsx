@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import api from "../utils/api";
 import CaretakerCard from "../components/CaretakerCard";
 import BookingModal from "../components/BookingModal";
+import { useNavigate } from "react-router-dom";
 
 const CaretakerListing = () => {
   const [caretakers, setCaretakers] = useState([]);
   const [error, setError] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [selectedCaretaker, setSelectedCaretaker] = useState(null);
+  const navigate = useNavigate();
+
   useEffect(() => {
     (async () => {
       try {
@@ -23,6 +26,11 @@ const CaretakerListing = () => {
     setSelectedCaretaker(caretaker);
     setOpenModal(true);
   };
+
+  const handleProfileClick = (caretaker) => {
+    navigate(`/caretaker-profile/${caretaker._id}`);
+  };
+
   return (
     <div className="flex flex-col justify-center items-center gap-2">
       {error && <p>{error}</p>}
@@ -42,6 +50,7 @@ const CaretakerListing = () => {
           totalReviews={caretaker.totalReviews}
           skills={caretaker.skills}
           onBookClick={() => handleBookClick(caretaker)}
+          showProfileClick={() => handleProfileClick(caretaker)}
         />
       ))}
       <BookingModal
