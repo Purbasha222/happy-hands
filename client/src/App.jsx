@@ -8,6 +8,7 @@ import MyBookings from "./pages/MyBookings";
 import CaretakerBookings from "./pages/CaretakerBookings";
 import CaretakerOnboarding from "./pages/CaretakerOnboarding";
 import CaretakerProfile from "./pages/CaretakerProfile";
+import EditCaretakerProfile from "./pages/EditCaretakerProfile";
 
 function App() {
   return (
@@ -28,6 +29,14 @@ function App() {
         element={
           <ProtectedRoute>
             <CaretakerProfile />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/caretaker-profile/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditCaretakerProfile />
           </ProtectedRoute>
         }
       />

@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import api from "../utils/api";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const CaretakerOnboarding = () => {
+const EditCaretakerProfile = () => {
   const [formData, setFormData] = useState({
     skills: [],
     careTypes: [],
@@ -13,6 +14,17 @@ const CaretakerOnboarding = () => {
     bio: "",
     phoneNumber: "",
   });
+  useEffect(() => {
+    const editProfile = async () => {
+      const res = await api.get("/caretakers/profile");
+      setFormData({
+        ...res.data.caretaker,
+        skills: res.data.caretaker.skills.join(", "),
+      });
+    };
+    editProfile();
+  }, []);
+
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -37,17 +49,11 @@ const CaretakerOnboarding = () => {
       const skillsArray = formData.skills.split(",").map((s) => s.trim());
       const payload = { ...formData, skills: skillsArray };
       const res = await api.put("/caretakers/edit-profile", payload);
-      navigate(`/caretaker-profile/${res.data.caretaker._id}`);
+      navigate(`/caretaker-profile/${res.data.updatedCaretaker._id}`);
     } catch (err) {
-      if (err.response?.status === 409) {
-        const profileRes = await api.get("/caretakers/profile");
-        navigate(`/caretaker-profile/${profileRes.data.caretaker._id}`);
-        return;
-      }
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
-
   return (
     <div className="min-h-screen bg-[#FBF5EE] py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center items-center">
       <div className="w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-[#EADBCE]/70 p-6 sm:p-10">
@@ -58,12 +64,9 @@ const CaretakerOnboarding = () => {
               🤝
             </div>
             <h2 className="text-3xl font-bold text-[#3B2416] tracking-tight">
-              Caretaker Onboarding
+              Edit Profile
             </h2>
-            <p className="text-sm text-[#5F4637]">
-              Complete your profile details to start receiving care requests
-              matching your expertise.
-            </p>
+            <p className="text-sm text-[#5F4637]">Edit your profile details</p>
           </div>
 
           {/* Error Message */}
@@ -90,6 +93,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="careTypes"
                   value="elderly"
+                  checked={formData.careTypes.includes("elderly")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -108,6 +112,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="careTypes"
                   value="child"
+                  checked={formData.careTypes.includes("child")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -126,6 +131,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="careTypes"
                   value="pet"
+                  checked={formData.careTypes.includes("pet")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -158,6 +164,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="availableShifts"
                   value="full-day"
+                  checked={formData.availableShifts.includes("full-day")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -176,6 +183,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="availableShifts"
                   value="full-night"
+                  checked={formData.availableShifts.includes("full-night")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -194,6 +202,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="availableShifts"
                   value="afternoon"
+                  checked={formData.availableShifts.includes("afternoon")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -212,6 +221,7 @@ const CaretakerOnboarding = () => {
                   type="checkbox"
                   name="availableShifts"
                   value="evening"
+                  checked={formData.availableShifts.includes("evening")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -239,6 +249,7 @@ const CaretakerOnboarding = () => {
             <input
               type="text"
               name="skills"
+              value={formData.skills}
               placeholder="e.g. CPR, First Aid, Mobility Assistance, Meal Prep"
               onChange={handleChange}
               className="w-full px-4 py-2.5 rounded-xl border border-[#EADBCE] bg-[#FAF7F2] text-[#3B2416] placeholder-[#A0887A] text-sm focus:outline-none focus:ring-2 focus:ring-[#E58B57] focus:bg-white transition"
@@ -337,7 +348,7 @@ const CaretakerOnboarding = () => {
             type="submit"
             className="w-full mt-2 py-3.5 px-6 rounded-full bg-[#E58B57] hover:bg-[#C9704F] text-white font-semibold text-base shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer text-center"
           >
-            Complete Profile
+            Edit Profile
           </button>
         </form>
       </div>
@@ -345,4 +356,4 @@ const CaretakerOnboarding = () => {
   );
 };
 
-export default CaretakerOnboarding;
+export default EditCaretakerProfile;
