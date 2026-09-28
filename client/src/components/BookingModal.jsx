@@ -10,7 +10,11 @@ const shiftDefaults = {
 };
 const formatDateForInput = (date) => date.toISOString().split("T")[0];
 
-const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
+const BookingModal = ({
+  selectedCaretaker,
+  openBookingModal,
+  setOpenBookingModal,
+}) => {
   const [formData, setFormData] = useState({
     careType: "",
     bookingType: "",
@@ -55,26 +59,26 @@ const BookingModal = ({ selectedCaretaker, openModal, setOpenModal }) => {
       e.preventDefault();
       const bookingData = { ...formData, caretakerId: selectedCaretaker._id };
       const res = await api.post("/bookings", bookingData);
-      setOpenModal(false);
+      setOpenBookingModal(false);
       navigate("/bookings/my");
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
 
-  if (!openModal) return null;
+  if (!openBookingModal) return null;
 
   return (
     <div
       className="fixed inset-0 bg-[#3A2E27]/40 flex items-center justify-center p-4 z-50"
-      onClick={() => setOpenModal(false)}
+      onClick={() => setOpenBookingModal(false)}
     >
       <div
         className="bg-[#FBF3E7] rounded-[20px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={() => setOpenModal(false)}
+          onClick={() => setOpenBookingModal(false)}
           className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white text-[#3A2E27] flex items-center justify-center hover:bg-[#F3D9CE] transition"
         >
           ✕

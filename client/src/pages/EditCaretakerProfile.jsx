@@ -92,8 +92,8 @@ const EditCaretakerProfile = () => {
                 <input
                   type="checkbox"
                   name="careTypes"
-                  value="elderly"
-                  checked={formData.careTypes.includes("elderly")}
+                  value="adult"
+                  checked={formData.careTypes.includes("adult")}
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -104,7 +104,7 @@ const EditCaretakerProfile = () => {
                   className="w-4 h-4 rounded accent-[#E58B57] text-[#E58B57] focus:ring-[#E58B57] cursor-pointer"
                 />
                 <span className="text-sm font-medium text-[#3B2416] flex items-center gap-2">
-                  <span>👵</span> Elderly
+                  <span>👵</span> Adult
                 </span>
               </label>
               <label className="flex items-center gap-3 p-3.5 rounded-xl border border-[#EADBCE] bg-[#FAF7F2] hover:border-[#E58B57] hover:bg-white cursor-pointer transition-all has-checked:border-[#E58B57] has-checked:bg-[#FFF8F3] has-checked:ring-1 has-checked:ring-[#E58B57]">

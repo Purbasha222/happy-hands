@@ -11,7 +11,7 @@ const caretakerSchema = new mongoose.Schema(
     careTypes: {
       type: [String],
       required: true,
-      enum: ["elderly", "child", "pet"],
+      enum: ["adult", "child", "pet"],
     },
     availableShifts: {
       type: [String],

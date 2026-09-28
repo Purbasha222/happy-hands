@@ -36,7 +36,7 @@ const CaretakerOnboarding = () => {
       e.preventDefault();
       const skillsArray = formData.skills.split(",").map((s) => s.trim());
       const payload = { ...formData, skills: skillsArray };
-      const res = await api.put("/caretakers/edit-profile", payload);
+      const res = await api.post("/caretakers/onboarding", payload);
       navigate(`/caretaker-profile/${res.data.caretaker._id}`);
     } catch (err) {
       if (err.response?.status === 409) {
@@ -89,7 +89,7 @@ const CaretakerOnboarding = () => {
                 <input
                   type="checkbox"
                   name="careTypes"
-                  value="elderly"
+                  value="adult"
                   onChange={(e) =>
                     handleCheckboxChange(
                       e.target.name,
@@ -100,7 +100,7 @@ const CaretakerOnboarding = () => {
                   className="w-4 h-4 rounded accent-[#E58B57] text-[#E58B57] focus:ring-[#E58B57] cursor-pointer"
                 />
                 <span className="text-sm font-medium text-[#3B2416] flex items-center gap-2">
-                  <span>👵</span> Elderly
+                  <span>👵</span> Adult
                 </span>
               </label>
               <label className="flex items-center gap-3 p-3.5 rounded-xl border border-[#EADBCE] bg-[#FAF7F2] hover:border-[#E58B57] hover:bg-white cursor-pointer transition-all has-checked:border-[#E58B57] has-checked:bg-[#FFF8F3] has-checked:ring-1 has-checked:ring-[#E58B57]">

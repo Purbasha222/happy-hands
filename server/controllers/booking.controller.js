@@ -8,6 +8,49 @@ const shiftDefaults = {
   evening: { startTime: "17:00", endTime: "21:00" },
 };
 
+// Helper: combines a booking's endDate + endTime into one precise Date object
+const getBookingEndDateTime = (booking) => {
+  const end = new Date(booking.endDate);
+  const [hours, minutes] = booking.endTime.split(":").map(Number);
+  end.setHours(hours, minutes, 0, 0);
+  return end;
+};
+
+const autoCompleteExpiredBookings = async (filter = {}) => {
+  const now = new Date();
+  const confirmedBookings = await Booking.find({
+    ...filter,
+    status: "confirmed",
+  });
+
+  // CHANGE 1: ids না, পুরো booking object রাখো
+  const expiredBookings = confirmedBookings.filter(
+    (b) => getBookingEndDateTime(b) <= now,
+  );
+
+  if (expiredBookings.length > 0) {
+    await Booking.updateMany(
+      { _id: { $in: expiredBookings.map((b) => b._id) } },
+      { status: "completed" },
+    );
+
+    // CHANGE 2: unique caretakerId-এর list
+    const caretakerIds = [
+      ...new Set(expiredBookings.map((b) => b.caretakerId.toString())),
+    ];
+
+    // CHANGE 3: আর কোনো confirmed booking না থাকলে available করো
+    for (const caretakerId of caretakerIds) {
+      const stillBooked = await Booking.findOne({
+        caretakerId,
+        status: "confirmed",
+      });
+      if (!stillBooked)
+        await Caretaker.findByIdAndUpdate(caretakerId, { isAvailable: true });
+    }
+  }
+};
+
 export const createBooking = async (req, res) => {
   try {
     const {
@@ -89,6 +132,7 @@ export const createBooking = async (req, res) => {
 export const getMyBookings = async (req, res) => {
   try {
     const userId = req.user._id;
+    await autoCompleteExpiredBookings({ userId });
     const myBooking = await Booking.find({ userId })
       .populate({
         path: "caretakerId",
@@ -114,6 +158,7 @@ export const getCaretakerBookings = async (req, res) => {
     if (!caretaker)
       return res.status(404).json({ message: "Caretaker not found!" });
 
+    await autoCompleteExpiredBookings({ caretakerId: caretaker._id });
     const caretakerBooking = await Booking.find({ caretakerId: caretaker._id })
       .populate("userId", "name phone city")
       .sort({ createdAt: -1 });
