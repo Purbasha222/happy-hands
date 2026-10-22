@@ -24,9 +24,9 @@ const Hero = () => {
 
           {/* DESCRIPTION */}
           <p className="mb-10 max-w-[560px] text-[20px] leading-[1.9] text-[#705C4E]">
-            Book trusted caretakers for children, pets, and elderly family
-            members — all in one peaceful platform designed to make care feel
-            human again.
+            Book trusted caretakers for children, pets, and adult family members
+            — all in one peaceful platform designed to make care feel human
+            again.
           </p>
 
           {/* BUTTONS */}

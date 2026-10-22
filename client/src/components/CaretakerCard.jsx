@@ -35,7 +35,7 @@ const CaretakerCard = ({
 
       {/* Header Info: Avatar, Name, Verification, Ratings & Experience */}
       <div className="flex items-start gap-4 pr-32">
-        <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E58B57] to-[#C9704F] text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
+        <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#E58B57] to-[#C9704F] text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
           {name?.charAt(0)}
         </div>
 

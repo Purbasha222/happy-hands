@@ -33,7 +33,7 @@ const Services = () => {
         <ServiceCard
           emoji="👵"
           image="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=1200&auto=format&fit=crop"
-          title="Elderly Care"
+          title="Adult Care"
           description="Compassionate caregivers offering companionship, daily assistance, and emotional support for seniors."
         />
       </div>

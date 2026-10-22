@@ -58,7 +58,7 @@ const BookingModal = ({
     try {
       e.preventDefault();
       const bookingData = { ...formData, caretakerId: selectedCaretaker._id };
-      const res = await api.post("/bookings", bookingData);
+      await api.post("/bookings", bookingData);
       setOpenBookingModal(false);
       navigate("/bookings/my");
     } catch (err) {
@@ -67,6 +67,8 @@ const BookingModal = ({
   };
 
   if (!openBookingModal) return null;
+
+  console.log(selectedCaretaker.careTypes);
 
   return (
     <div
@@ -100,6 +102,7 @@ const BookingModal = ({
             <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
               Care Type
             </label>
+
             <select
               required
               name="careType"
@@ -107,10 +110,10 @@ const BookingModal = ({
               onChange={handleChange}
               className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
             >
-              <option value="">Select</option>
-              <option value="child">Child</option>
-              <option value="adult">Adult</option>
-              <option value="pet">Pet</option>
+              <option value="Select">Select</option>
+              {selectedCaretaker.careTypes.map((careType) => (
+                <option value={careType}>{careType}</option>
+              ))}
             </select>
           </div>
 
