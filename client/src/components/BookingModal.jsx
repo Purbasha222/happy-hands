@@ -10,6 +10,19 @@ const shiftDefaults = {
 };
 const formatDateForInput = (date) => date.toISOString().split("T")[0];
 
+const initialFormData = {
+  careType: "",
+  bookingType: "",
+  shift: "",
+  startDate: "",
+  endDate: "",
+  startTime: "",
+  endTime: "",
+  address: "",
+  city: "",
+  specialInstructions: "",
+};
+
 const BookingModal = ({
   selectedCaretaker,
   openBookingModal,
@@ -59,28 +72,32 @@ const BookingModal = ({
       e.preventDefault();
       const bookingData = { ...formData, caretakerId: selectedCaretaker._id };
       await api.post("/bookings", bookingData);
-      setOpenBookingModal(false);
+      handleClose();
       navigate("/bookings/my");
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     }
   };
 
-  if (!openBookingModal) return null;
+  const handleClose = () => {
+    setFormData(initialFormData);
+    setError("");
+    setOpenBookingModal(false);
+  };
 
-  console.log(selectedCaretaker.careTypes);
+  if (!openBookingModal) return null;
 
   return (
     <div
       className="fixed inset-0 bg-[#3A2E27]/40 flex items-center justify-center p-4 z-50"
-      onClick={() => setOpenBookingModal(false)}
+      onClick={handleClose}
     >
       <div
         className="bg-[#FBF3E7] rounded-[20px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
-          onClick={() => setOpenBookingModal(false)}
+          onClick={handleClose}
           className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white text-[#3A2E27] flex items-center justify-center hover:bg-[#F3D9CE] transition"
         >
           ✕
@@ -110,9 +127,11 @@ const BookingModal = ({
               onChange={handleChange}
               className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
             >
-              <option value="Select">Select</option>
+              <option value="">Select</option>
               {selectedCaretaker.careTypes.map((careType) => (
-                <option value={careType}>{careType}</option>
+                <option value={careType} key={careType}>
+                  {careType}
+                </option>
               ))}
             </select>
           </div>
@@ -146,10 +165,11 @@ const BookingModal = ({
               className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
             >
               <option value="">Select</option>
-              <option value="full-day">Full day</option>
-              <option value="full-night">Full night</option>
-              <option value="afternoon">Afternoon</option>
-              <option value="evening">Evening</option>
+              {selectedCaretaker.availableShifts.map((shift) => (
+                <option value={shift} key={shift}>
+                  {shift}
+                </option>
+              ))}
             </select>
           </div>
 

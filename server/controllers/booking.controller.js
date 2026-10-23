@@ -67,6 +67,20 @@ export const createBooking = async (req, res) => {
       caretakerId,
     } = req.body;
 
+    const caretaker = await Caretaker.findById(caretakerId);
+    if (!caretaker)
+      return res.status(404).json({ message: "Caretaker not found!" });
+
+    if (!caretaker.careTypes.includes(careType))
+      return res
+        .status(400)
+        .json({ message: "This caretaker does not offer that care type." });
+
+    if (!caretaker.availableShifts.includes(shift))
+      return res
+        .status(400)
+        .json({ message: "This caretaker is not available for that shift." });
+
     const conflictingBooking = await Booking.findOne({
       userId: req.user._id,
       shift,
@@ -80,10 +94,6 @@ export const createBooking = async (req, res) => {
         message:
           "You already have a confirmed booking for this shift and date range.",
       });
-
-    const caretaker = await Caretaker.findById(caretakerId);
-    if (!caretaker)
-      return res.status(404).json({ message: "Caretaker not found!" });
 
     const dailyRate = caretaker.dailyRate;
     const urgentRate = caretaker.urgentRate;
