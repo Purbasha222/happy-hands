@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import CaretakerBookingCard from "../components/CaretakerBookingCard";
+import Navbar from "../components/Navbar";
 
 const CaretakerBookings = () => {
   const [booking, setBooking] = useState([]);

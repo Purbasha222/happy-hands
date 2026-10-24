@@ -84,6 +84,7 @@ export const createBooking = async (req, res) => {
     const conflictingBooking = await Booking.findOne({
       userId: req.user._id,
       shift,
+      careType,
       status: "confirmed",
       startDate: { $lte: endDate },
       endDate: { $gte: startDate },
@@ -92,7 +93,21 @@ export const createBooking = async (req, res) => {
     if (conflictingBooking)
       return res.status(400).json({
         message:
-          "You already have a confirmed booking for this shift and date range.",
+          "You already have a confirmed booking for this care type, shift and date range.",
+      });
+
+    const caretakerConflict = await Booking.findOne({
+      caretakerId,
+      shift,
+      status: "confirmed",
+      startDate: { $lte: endDate },
+      endDate: { $gte: startDate },
+    });
+
+    if (caretakerConflict)
+      return res.status(400).json({
+        message:
+          "This caretaker is already booked for this shift and date range.",
       });
 
     const dailyRate = caretaker.dailyRate;
@@ -162,7 +177,6 @@ export const getMyBookings = async (req, res) => {
 
 export const getCaretakerBookings = async (req, res) => {
   try {
-    const userId = req.user._id;
     const caretaker = await Caretaker.findOne({ userId: req.user._id });
 
     if (!caretaker)
@@ -197,7 +211,7 @@ export const updateBookingStatus = async (req, res) => {
         isAvailable: false,
       });
 
-      const caretakerConflicts = await Booking.updateMany(
+      await Booking.updateMany(
         {
           caretakerId: booking.caretakerId,
           status: "pending",
@@ -213,6 +227,7 @@ export const updateBookingStatus = async (req, res) => {
       const conflictingBookings = await Booking.find({
         userId: booking.userId,
         shift: booking.shift,
+        careType: booking.careType,
         status: "pending",
         _id: { $ne: booking._id },
         startDate: { $lte: booking.endDate },
@@ -223,6 +238,7 @@ export const updateBookingStatus = async (req, res) => {
         {
           userId: booking.userId,
           shift: booking.shift,
+          careType: booking.careType,
           status: "pending",
           _id: { $ne: booking._id },
           startDate: { $lte: booking.endDate },

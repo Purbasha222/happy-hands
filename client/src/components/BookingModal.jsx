@@ -23,23 +23,25 @@ const initialFormData = {
   specialInstructions: "",
 };
 
+const shiftsLabels = {
+  "full-day": "Full Day",
+  "full-night": "Full Night",
+  afternoon: "Afternoon",
+  evening: "Evening",
+};
+
+const careTypesLabels = {
+  adult: "Adult",
+  child: "Child",
+  pet: "Pet",
+};
+
 const BookingModal = ({
   selectedCaretaker,
   openBookingModal,
   setOpenBookingModal,
 }) => {
-  const [formData, setFormData] = useState({
-    careType: "",
-    bookingType: "",
-    shift: "",
-    startDate: "",
-    endDate: "",
-    startTime: "",
-    endTime: "",
-    address: "",
-    city: "",
-    specialInstructions: "",
-  });
+  const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -130,7 +132,7 @@ const BookingModal = ({
               <option value="">Select</option>
               {selectedCaretaker.careTypes.map((careType) => (
                 <option value={careType} key={careType}>
-                  {careType}
+                  {careTypesLabels[careType]}
                 </option>
               ))}
             </select>
@@ -167,7 +169,7 @@ const BookingModal = ({
               <option value="">Select</option>
               {selectedCaretaker.availableShifts.map((shift) => (
                 <option value={shift} key={shift}>
-                  {shift}
+                  {shiftsLabels[shift]}
                 </option>
               ))}
             </select>
