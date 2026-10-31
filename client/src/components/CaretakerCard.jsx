@@ -4,7 +4,6 @@ const CaretakerCard = ({
   careTypes = [],
   dailyRate,
   urgentRate,
-  isAvailable,
   isVerified,
   experience,
   rating,
@@ -18,23 +17,8 @@ const CaretakerCard = ({
       className="group relative bg-white border border-[#EADBCE]/80 hover:border-[#E58B57]/60 rounded-3xl p-6 shadow-md hover:shadow-xl transition-all duration-200 cursor-pointer flex flex-col justify-between gap-4"
       onClick={showProfileClick}
     >
-      {/* Top Right Availability Badge */}
-      <div className="absolute top-5 right-5">
-        {isAvailable ? (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 shadow-xs">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Available Now
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-stone-100 text-stone-500 border border-stone-200">
-            <span className="w-2 h-2 rounded-full bg-stone-400"></span>
-            Not Available
-          </span>
-        )}
-      </div>
-
       {/* Header Info: Avatar, Name, Verification, Ratings & Experience */}
-      <div className="flex items-start gap-4 pr-32">
+      <div className="flex items-start gap-4">
         <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-[#E58B57] to-[#C9704F] text-white flex items-center justify-center font-bold text-2xl shadow-sm shrink-0">
           {name?.charAt(0)}
         </div>
@@ -173,12 +157,7 @@ const CaretakerCard = ({
               e.stopPropagation();
               onBookClick();
             }}
-            className={
-              isAvailable
-                ? "px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-[#E58B57] hover:bg-[#C9704F] rounded-full shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer hover:scale-105 active:scale-100"
-                : "px-5 py-2 text-xs sm:text-sm font-semibold text-gray-400 bg-gray-200 rounded-full cursor-not-allowed"
-            }
-            disabled={!isAvailable}
+            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-[#E58B57] hover:bg-[#C9704F] rounded-full shadow-md hover:shadow-lg transition-all duration-150 cursor-pointer hover:scale-105 active:scale-100"
           >
             Book now
           </button>

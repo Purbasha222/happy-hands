@@ -16,6 +16,19 @@ const getBookingEndDateTime = (booking) => {
   return end;
 };
 
+const getRange = (startDate, startTime, endDate, endTime) => {
+  const start = new Date(startDate);
+  const [sh, sm] = startTime.split(":").map(Number);
+  start.setHours(sh, sm, 0, 0);
+
+  const end = new Date(endDate);
+  const [eh, em] = endTime.split(":").map(Number);
+  end.setHours(eh, em, 0, 0);
+
+  if (end <= start) end.setDate(end.getDate() + 1); // full-night
+  return { start, end };
+};
+
 const autoCompleteExpiredBookings = async (filter = {}) => {
   const now = new Date();
   const confirmedBookings = await Booking.find({
@@ -23,7 +36,6 @@ const autoCompleteExpiredBookings = async (filter = {}) => {
     status: "confirmed",
   });
 
-  // CHANGE 1: ids না, পুরো booking object রাখো
   const expiredBookings = confirmedBookings.filter(
     (b) => getBookingEndDateTime(b) <= now,
   );
@@ -33,21 +45,6 @@ const autoCompleteExpiredBookings = async (filter = {}) => {
       { _id: { $in: expiredBookings.map((b) => b._id) } },
       { status: "completed" },
     );
-
-    // CHANGE 2: unique caretakerId-এর list
-    const caretakerIds = [
-      ...new Set(expiredBookings.map((b) => b.caretakerId.toString())),
-    ];
-
-    // CHANGE 3: আর কোনো confirmed booking না থাকলে available করো
-    for (const caretakerId of caretakerIds) {
-      const stillBooked = await Booking.findOne({
-        caretakerId,
-        status: "confirmed",
-      });
-      if (!stillBooked)
-        await Caretaker.findByIdAndUpdate(caretakerId, { isAvailable: true });
-    }
   }
 };
 
@@ -96,18 +93,49 @@ export const createBooking = async (req, res) => {
           "You already have a confirmed booking for this care type, shift and date range.",
       });
 
-    const caretakerConflict = await Booking.findOne({
+    const finalStartTime = startTime || shiftDefaults[shift].startTime;
+    const finalEndTime = endTime || shiftDefaults[shift].endTime;
+
+    const { start: newStart, end: newEnd } = getRange(
+      startDate,
+      finalStartTime,
+      endDate,
+      finalEndTime,
+    );
+
+    const { start: shiftStart, end: shiftEnd } = getRange(
+      startDate,
+      shiftDefaults[shift].startTime,
+      endDate,
+      shiftDefaults[shift].endTime,
+    );
+
+    if (newStart < shiftStart || newEnd > shiftEnd) {
+      return res.status(400).json({
+        message: "Selected time is outside the shift's allowed range.",
+      });
+    }
+
+    const caretakerBookings = await Booking.find({
       caretakerId,
-      shift,
       status: "confirmed",
       startDate: { $lte: endDate },
       endDate: { $gte: startDate },
     });
 
-    if (caretakerConflict)
+    const hasOverlap = caretakerBookings.some((b) => {
+      const { start, end } = getRange(
+        b.startDate,
+        b.startTime,
+        b.endDate,
+        b.endTime,
+      );
+      return newStart < end && newEnd > start;
+    });
+
+    if (hasOverlap)
       return res.status(400).json({
-        message:
-          "This caretaker is already booked for this shift and date range.",
+        message: "This caretaker is already booked for this time range.",
       });
 
     const dailyRate = caretaker.dailyRate;
@@ -120,18 +148,6 @@ export const createBooking = async (req, res) => {
 
     const totalAmount =
       totalDays * (bookingType === "scheduled" ? dailyRate : urgentRate);
-
-    const finalStartTime = startTime || shiftDefaults[shift].startTime;
-    const finalEndTime = endTime || shiftDefaults[shift].endTime;
-
-    if (
-      finalStartTime < shiftDefaults[shift].startTime ||
-      finalEndTime > shiftDefaults[shift].endTime
-    ) {
-      return res.status(400).json({
-        message: "Selected time is outside the shift's allowed range.",
-      });
-    }
 
     const booking = await Booking.create({
       careType,
@@ -207,32 +223,39 @@ export const updateBookingStatus = async (req, res) => {
     booking.status = status;
 
     if (status === "confirmed") {
-      await Caretaker.findByIdAndUpdate(booking.caretakerId, {
-        isAvailable: false,
-      });
-
-      await Booking.updateMany(
-        {
-          caretakerId: booking.caretakerId,
-          status: "pending",
-          _id: { $ne: booking._id },
-          startDate: { $lte: booking.endDate },
-          endDate: { $gte: booking.startDate },
-          startTime: { $lte: booking.endTime },
-          endTime: { $gte: booking.startTime },
-        },
-        { status: "auto-cancelled" },
+      const { start: confirmedStart, end: confirmedEnd } = getRange(
+        booking.startDate,
+        booking.startTime,
+        booking.endDate,
+        booking.endTime,
       );
 
-      const conflictingBookings = await Booking.find({
-        userId: booking.userId,
-        shift: booking.shift,
-        careType: booking.careType,
+      const pendingBookings = await Booking.find({
+        caretakerId: booking.caretakerId,
         status: "pending",
         _id: { $ne: booking._id },
         startDate: { $lte: booking.endDate },
         endDate: { $gte: booking.startDate },
       });
+
+      const overlappingIds = pendingBookings
+        .filter((b) => {
+          const { start, end } = getRange(
+            b.startDate,
+            b.startTime,
+            b.endDate,
+            b.endTime,
+          );
+          return confirmedStart < end && confirmedEnd > start;
+        })
+        .map((b) => b._id);
+
+      if (overlappingIds.length > 0) {
+        await Booking.updateMany(
+          { _id: { $in: overlappingIds } },
+          { status: "auto-cancelled" },
+        );
+      }
 
       await Booking.updateMany(
         {
@@ -246,26 +269,6 @@ export const updateBookingStatus = async (req, res) => {
         },
         { status: "auto-cancelled" },
       );
-
-      for (const b of conflictingBookings) {
-        const stillBooked = await Booking.findOne({
-          caretakerId: b.caretakerId,
-          status: "confirmed",
-        });
-        if (!stillBooked)
-          await Caretaker.findByIdAndUpdate(b.caretakerId, {
-            isAvailable: true,
-          });
-      }
-    } else if (status === "completed" || status === "cancelled") {
-      const stillBooked = await Booking.findOne({
-        caretakerId: booking.caretakerId,
-        status: "confirmed",
-      });
-      if (!stillBooked)
-        await Caretaker.findByIdAndUpdate(booking.caretakerId, {
-          isAvailable: true,
-        });
     }
 
     const updatedBookingStatus = await booking.save();

@@ -78,7 +78,6 @@ const CaretakerListing = () => {
                 careTypes={caretaker.careTypes}
                 dailyRate={caretaker.dailyRate}
                 urgentRate={caretaker.urgentRate}
-                isAvailable={caretaker.isAvailable}
                 isVerified={caretaker.isVerified}
                 experience={caretaker.experience}
                 rating={caretaker.rating}
