@@ -33,7 +33,7 @@ const CaretakerListing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FBF5EE] flex flex-col">
+    <div className="min-h-screen bg-[#FBF9F4] flex flex-col">
       <Navbar />
 
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -41,15 +41,16 @@ const CaretakerListing = () => {
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#3B2416] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E2B22] tracking-tight">
                 Find a Caretaker
               </h1>
-              <p className="mt-1.5 text-sm sm:text-base text-[#5F4637]">
+              <p className="mt-1.5 text-sm sm:text-base text-[#415146]">
                 Connect with qualified caretakers for adult, child, and pet care
                 on your schedule.
               </p>
             </div>
-            <div className="inline-flex items-center gap-2 bg-[#F0E1DC] text-[#3B2416] px-4 py-2 rounded-full text-sm font-semibold self-start sm:self-center shadow-xs">
+
+            <div className="inline-flex items-center gap-2 bg-[#EAF2EC] text-[#2A5C43] border border-[#D0E2D5] px-4 py-2 rounded-full text-sm font-semibold self-start sm:self-center shadow-xs">
               <span>👥</span>
               <span>
                 {caretakers.length}{" "}
@@ -61,7 +62,7 @@ const CaretakerListing = () => {
 
         {/* Error Alert */}
         {error && (
-          <div className="mb-6 p-4 text-sm text-[#C9704F] bg-[#F0E1DC] border border-[#E58B57]/30 rounded-2xl flex items-center gap-2">
+          <div className="mb-6 p-4 text-sm text-rose-800 bg-rose-50 border border-rose-200/70 rounded-2xl flex items-center gap-2">
             <span className="font-semibold">Notice:</span>
             <span>{error}</span>
           </div>
@@ -89,12 +90,12 @@ const CaretakerListing = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 bg-white rounded-3xl border border-[#EADBCE]/70 p-8 shadow-xs">
+          <div className="text-center py-16 bg-[#FAF7F0] rounded-3xl border border-[#EAE4D6] p-8 shadow-xs">
             <div className="text-4xl mb-3">🔍</div>
-            <h3 className="text-lg font-bold text-[#3B2416]">
+            <h3 className="text-lg font-bold text-[#1E2B22]">
               No Caretakers Available
             </h3>
-            <p className="text-sm text-[#5F4637] mt-1">
+            <p className="text-sm text-[#637568] mt-1">
               Please check back later as new caretakers join Happy Hands
               regularly.
             </p>

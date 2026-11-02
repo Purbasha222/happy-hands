@@ -91,34 +91,34 @@ const BookingModal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-[#3A2E27]/40 flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-[#1E2B22]/45 backdrop-blur-[2px] flex items-center justify-center p-4 z-50"
       onClick={handleClose}
     >
       <div
-        className="bg-[#FBF3E7] rounded-[20px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden p-6 relative"
+        className="bg-[#FAF7F0] border border-[#EAE4D6] rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={handleClose}
-          className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white text-[#3A2E27] flex items-center justify-center hover:bg-[#F3D9CE] transition"
+          className="absolute top-4 right-4 h-8 w-8 rounded-full bg-[#EAF2EC] text-[#2A5C43] flex items-center justify-center hover:bg-[#D8E6DB] transition cursor-pointer"
         >
           ✕
         </button>
 
-        <h2 className="font-['Quicksand'] font-bold text-xl text-[#2F5D5A] mb-1">
+        <h2 className="font-['Quicksand'] font-bold text-xl text-[#2A5C43] mb-1">
           Booking with {selectedCaretaker.userId.name}
         </h2>
-        <p className="text-xs text-[#3A2E27]/60 mb-4">
+        <p className="text-xs text-[#637568] mb-4">
           Fill in the details below to request a booking.
         </p>
         {error && (
-          <p className="text-sm text-[#C9704F] bg-[#F0E1DC] rounded-lg px-3 py-2 mb-3">
+          <p className="text-sm text-rose-800 bg-rose-50 border border-rose-200/70 rounded-xl px-3 py-2 mb-3">
             {error}
           </p>
         )}
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               Care Type
             </label>
 
@@ -127,7 +127,7 @@ const BookingModal = ({
               name="careType"
               value={formData.careType}
               onChange={handleChange}
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             >
               <option value="">Select</option>
               {selectedCaretaker.careTypes.map((careType) => (
@@ -139,7 +139,7 @@ const BookingModal = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               Booking Type
             </label>
             <select
@@ -147,7 +147,7 @@ const BookingModal = ({
               name="bookingType"
               value={formData.bookingType}
               onChange={handleChange}
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             >
               <option value="">Select</option>
               <option value="scheduled">Scheduled</option>
@@ -156,7 +156,7 @@ const BookingModal = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               Shift
             </label>
             <select
@@ -164,7 +164,7 @@ const BookingModal = ({
               name="shift"
               value={formData.shift}
               onChange={handleChange}
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             >
               <option value="">Select</option>
               {selectedCaretaker.availableShifts.map((shift) => (
@@ -177,7 +177,7 @@ const BookingModal = ({
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+              <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
                 Start Date
               </label>
               <input
@@ -186,11 +186,11 @@ const BookingModal = ({
                 name="startDate"
                 value={formData.startDate}
                 onChange={handleChange}
-                className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+                className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+              <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
                 End Date
               </label>
               <input
@@ -199,14 +199,14 @@ const BookingModal = ({
                 name="endDate"
                 value={formData.endDate}
                 onChange={handleChange}
-                className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+                className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
               />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+              <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
                 Start Time
               </label>
               <input
@@ -216,11 +216,11 @@ const BookingModal = ({
                 onChange={handleChange}
                 min={shiftDefaults[formData.shift]?.startTime}
                 max={shiftDefaults[formData.shift]?.endTime}
-                className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+                className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+              <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
                 End Time
               </label>
               <input
@@ -230,13 +230,13 @@ const BookingModal = ({
                 onChange={handleChange}
                 min={shiftDefaults[formData.shift]?.startTime}
                 max={shiftDefaults[formData.shift]?.endTime}
-                className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+                className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               Address
             </label>
             <input
@@ -245,12 +245,12 @@ const BookingModal = ({
               value={formData.address}
               onChange={handleChange}
               placeholder="Street address"
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               City
             </label>
             <input
@@ -259,12 +259,12 @@ const BookingModal = ({
               value={formData.city}
               onChange={handleChange}
               placeholder="City"
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             />
           </div>
 
           <div>
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               Special Instructions
             </label>
             <textarea
@@ -273,12 +273,12 @@ const BookingModal = ({
               onChange={handleChange}
               placeholder="Anything the caretaker should know?"
               rows={3}
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             />
           </div>
 
-          <div className="flex justify-between items-baseline pt-2 border-t border-dashed border-[#3A2E27]/15">
-            <span className="text-xs text-[#3A2E27]/60">
+          <div className="flex justify-between items-baseline pt-3 border-t border-dashed border-[#DCD6C8]">
+            <span className="text-xs text-[#637568]">
               ₹
               {formData.bookingType === "urgent"
                 ? selectedCaretaker.urgentRate
@@ -287,7 +287,7 @@ const BookingModal = ({
             </span>
             <button
               type="submit"
-              className="bg-[#2F5D5A] text-white font-semibold text-sm px-5 py-2 rounded-full hover:bg-[#254B48] transition"
+              className="bg-[#2A5C43] hover:bg-[#1F4532] text-white font-semibold text-sm px-5 py-2.5 rounded-full shadow-md hover:shadow-lg transition cursor-pointer hover:scale-105 active:scale-100"
             >
               Confirm Booking
             </button>

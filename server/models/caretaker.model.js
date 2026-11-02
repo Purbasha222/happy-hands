@@ -25,7 +25,6 @@ const caretakerSchema = new mongoose.Schema(
     urgentRate: { type: Number, default: 400 },
     rating: { type: Number, default: 0 },
     totalReviews: { type: Number, default: 0 },
-    isAvailable: { type: Boolean, default: true },
     isVerified: { type: Boolean, default: false },
     bio: { type: String },
     experience: { type: Number, default: 0 },

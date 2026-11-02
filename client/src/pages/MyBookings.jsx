@@ -40,25 +40,24 @@ const MyBookings = () => {
   };
 
   return (
-    /* Antigravity: "Added full-page wrapper with min-h-screen, flex-col, and brand background color #FBF5EE" */
-    <div className="min-h-screen bg-[#FBF5EE] flex flex-col">
+    <div className="min-h-screen bg-[#FBF9F4] flex flex-col">
       <Navbar />
 
-      {/* Antigravity: "Added responsive main container with max-w-7xl, auto margins, and standard padding" */}
       <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Antigravity: "Styled header section with responsive flex layout, brand typography, subtitle, and bookings counter badge" */}
+        {/* Header section */}
         <div className="mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#3B2416] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1E2B22] tracking-tight">
                 My Bookings
               </h1>
-              <p className="mt-1.5 text-sm sm:text-base text-[#5F4637]">
+              <p className="mt-1.5 text-sm sm:text-base text-[#415146]">
                 Track and manage your upcoming, ongoing, and completed care
                 bookings.
               </p>
             </div>
-            <div className="inline-flex items-center gap-2 bg-[#F0E1DC] text-[#3B2416] px-4 py-2 rounded-full text-sm font-semibold self-start sm:self-center shadow-xs">
+
+            <div className="inline-flex items-center gap-2 bg-[#EAF2EC] text-[#2A5C43] border border-[#D0E2D5] px-4 py-2 rounded-full text-sm font-semibold self-start sm:self-center shadow-xs">
               <span>📅</span>
               <span>
                 {booking.length} {booking.length === 1 ? "Booking" : "Bookings"}{" "}
@@ -68,19 +67,17 @@ const MyBookings = () => {
           </div>
         </div>
 
-        {/* Antigravity: "Styled error alert banner with matching peach background, border, and text styling" */}
+        {/* Error alert banner */}
         {error && (
-          <div className="mb-6 p-4 text-sm text-[#C9704F] bg-[#F0E1DC] border border-[#E58B57]/30 rounded-2xl flex items-center gap-2">
+          <div className="mb-6 p-4 text-sm text-rose-800 bg-rose-50 border border-rose-200/70 rounded-2xl flex items-center gap-2">
             <span className="font-semibold">Notice:</span>
             <span>{error}</span>
           </div>
         )}
 
-        {/* Antigravity: "Replaced raw flex container with responsive grid (grid-cols-1 md:grid-cols-2 lg:grid-cols-3) and added empty state fallback" */}
         {booking.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
             {booking.map((b) => (
-              /* Antigravity: "Styled each booking item wrapper with max-w-md, mx-auto, and flex-col for proper card and button alignment" */
               <div
                 key={b._id}
                 className="w-full max-w-md mx-auto flex flex-col h-full justify-between"
@@ -100,12 +97,12 @@ const MyBookings = () => {
                   totalAmount={b.totalAmount}
                   specialInstructions={b.specialInstructions}
                 />
-                {/* Antigravity: "Styled 'Leave a Review' button with brand terracotta background #E58B57, rounded-full pill shape, hover animation, and star icon" */}
+
                 {canReview(b) && (
                   <button
                     type="button"
                     onClick={() => handleReviewClick(b)}
-                    className="mt-3 w-full py-2.5 px-4 bg-[#E58B57] hover:bg-[#C9704F] text-white font-semibold text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-150 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-100"
+                    className="mt-3 w-full py-2.5 px-4 bg-[#2A5C43] hover:bg-[#1F4532] text-white font-semibold text-sm rounded-full shadow-sm hover:shadow-md transition-all duration-150 flex items-center justify-center gap-1.5 cursor-pointer hover:scale-[1.02] active:scale-100"
                   >
                     <span>★</span> Leave a Review
                   </button>
@@ -114,20 +111,19 @@ const MyBookings = () => {
             ))}
           </div>
         ) : (
-          /* Antigravity: "Added clean empty state UI card when no bookings exist" */
-          <div className="text-center py-16 bg-white rounded-3xl border border-[#EADBCE]/70 p-8 shadow-xs">
+          <div className="text-center py-16 bg-[#FAF7F0] rounded-3xl border border-[#EAE4D6] p-8 shadow-xs">
             <div className="text-4xl mb-3">📅</div>
-            <h3 className="text-lg font-bold text-[#3B2416]">
+            <h3 className="text-lg font-bold text-[#1E2B22]">
               No Bookings Found
             </h3>
-            <p className="text-sm text-[#5F4637] mt-1">
+            <p className="text-sm text-[#637568] mt-1">
               You haven't made any bookings yet. Browse our caretakers to
               schedule care.
             </p>
           </div>
         )}
 
-        {/*Review Modal */}
+        {/* Review Modal */}
         <ReviewModal
           selectedBooking={selectedBooking}
           openReviewModal={openReviewModal}

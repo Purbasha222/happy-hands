@@ -2,14 +2,14 @@ import ServiceCard from "./ServiceCard";
 
 const Services = () => {
   return (
-    <section className="rounded-t-[50px] bg-[#FFFDFB] px-[7%] py-24">
+    <section className="rounded-t-[50px] bg-[#F7F5EE] border-t border-[#EAE4D6] px-[7%] py-24">
       {/* TITLE */}
       <div className="mb-20 text-center">
-        <p className="mb-4 text-[14px] font-semibold tracking-[3px] text-[#D98557]">
+        <p className="mb-4 text-[14px] font-semibold tracking-[3px] text-[#2A5C43]">
           WHAT WE OFFER
         </p>
 
-        <h2 className="text-5xl font-bold text-[#341D10]">
+        <h2 className="text-5xl font-bold text-[#1E2B22]">
           Care for every family.
         </h2>
       </div>

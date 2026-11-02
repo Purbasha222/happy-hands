@@ -37,12 +37,11 @@ export const createCaretakerProfile = async (req, res) => {
 
 export const getCaretakers = async (req, res) => {
   try {
-    const { city, careType, shift, isAvailable } = req.query;
+    const { city, careType, shift } = req.query;
     const filter = {};
     if (city) filter.city = city;
     if (careType) filter.careTypes = { $in: [careType] };
     if (shift) filter.availableShifts = { $in: [shift] };
-    if (isAvailable) filter.isAvailable = isAvailable === "true";
 
     const caretakers = await Caretaker.find(filter).populate(
       "userId",
@@ -88,15 +87,8 @@ export const getCaretakerProfile = async (req, res) => {
 
 export const updateCaretakerProfile = async (req, res) => {
   try {
-    const {
-      skills,
-      careTypes,
-      bio,
-      experience,
-      dailyRate,
-      urgentRate,
-      isAvailable,
-    } = req.body;
+    const { skills, careTypes, bio, experience, dailyRate, urgentRate } =
+      req.body;
     const caretaker = await Caretaker.findOne({ userId: req.user._id });
     if (!caretaker)
       return res.status(404).json({ message: "Caretaker not found" });
@@ -106,27 +98,11 @@ export const updateCaretakerProfile = async (req, res) => {
     caretaker.experience = experience ?? caretaker.experience;
     caretaker.dailyRate = dailyRate ?? caretaker.dailyRate;
     caretaker.urgentRate = urgentRate ?? caretaker.urgentRate;
-    caretaker.isAvailable = isAvailable ?? caretaker.isAvailable;
 
     const updatedCaretaker = await caretaker.save();
     return res
       .status(200)
       .json({ message: "Profile updated successfully!", updatedCaretaker });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const toggleAvailability = async (req, res) => {
-  try {
-    const caretaker = await Caretaker.findOne({ userId: req.user._id });
-    if (!caretaker)
-      return res.status(404).json({ message: "Caretaker not found!" });
-    caretaker.isAvailable = !caretaker.isAvailable;
-    const available = await caretaker.save();
-    return res
-      .status(200)
-      .json({ message: "Toggled successfully!", available });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

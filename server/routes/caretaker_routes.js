@@ -4,7 +4,6 @@ import {
   getCaretakerProfile,
   getCaretakers,
   getCaretakersById,
-  toggleAvailability,
   updateCaretakerProfile,
 } from "../controllers/caretaker.controller.js";
 import auth from "../middlewares/auth.middleware.js";
@@ -17,6 +16,5 @@ route.get("/", getCaretakers);
 route.get("/profile", auth, role("caretaker"), getCaretakerProfile);
 route.get("/:id", getCaretakersById);
 route.put("/edit-profile", auth, role("caretaker"), updateCaretakerProfile);
-route.patch("/availability", auth, role("caretaker"), toggleAvailability);
 
 export default route;

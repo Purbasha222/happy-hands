@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 
 const colors = {
-  orange: "#F2C265",
-  grey: "#a9a9a9",
+  orange: "#D99426",
+  grey: "#D1CBBF",
 };
 
 const ReviewModal = ({
@@ -66,28 +66,28 @@ const ReviewModal = ({
 
   return (
     <div
-      className="fixed inset-0 bg-[#3A2E27]/40 flex items-center justify-center p-4 z-50"
+      className="fixed inset-0 bg-[#1E2B22]/45 backdrop-blur-[2px] flex items-center justify-center p-4 z-50"
       onClick={closeModal}
     >
       <div
-        className="bg-[#FBF3E7] rounded-[20px] shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden p-6 relative"
+        className="bg-[#FAF7F0] border border-[#EAE4D6] rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto [&::-webkit-scrollbar]:hidden p-6 relative"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={closeModal}
-          className="absolute top-4 right-4 h-8 w-8 rounded-full bg-white text-[#3A2E27] flex items-center justify-center hover:bg-[#F3D9CE] transition"
+          className="absolute top-4 right-4 h-8 w-8 rounded-full bg-[#EAF2EC] text-[#2A5C43] flex items-center justify-center hover:bg-[#D8E6DB] transition cursor-pointer"
         >
           ✕
         </button>
 
-        <h2 className="font-['Quicksand'] font-bold text-xl text-[#2F5D5A] mb-1">
+        <h2 className="font-['Quicksand'] font-bold text-xl text-[#2A5C43] mb-1">
           Leave a review for {selectedBooking.caretakerId.userId.name}
         </h2>
 
-        <p className="text-xs text-[#3A2E27]/60 mb-4">Leave a review</p>
+        <p className="text-xs text-[#637568] mb-4">Leave a review</p>
 
         {error && (
-          <p className="text-sm text-[#C9704F] bg-[#F0E1DC] rounded-lg px-3 py-2 mb-3">
+          <p className="text-sm text-rose-800 bg-rose-50 border border-rose-200/70 rounded-xl px-3 py-2 mb-3">
             {error}
           </p>
         )}
@@ -109,12 +109,12 @@ const ReviewModal = ({
                 onMouseLeave={() => setHoverValue(undefined)}
               />
             ))}
-            <p className="text-sm text-[#3A2E27]/70">
+            <p className="text-sm text-[#415146] font-medium">
               ({formData.rating} Stars)
             </p>
           </div>
           <div className="flex flex-col gap-3">
-            <label className="block text-xs font-semibold text-[#2F5D5A] mb-1">
+            <label className="block text-xs font-semibold text-[#2A5C43] mb-1">
               Share your experience
             </label>
             <textarea
@@ -123,12 +123,12 @@ const ReviewModal = ({
               onChange={handleChange}
               placeholder="Leave a review about your experience"
               rows={3}
-              className="w-full bg-white border border-[#3A2E27]/15 rounded-lg px-3 py-2 text-sm text-[#3A2E27] focus:outline-none focus:border-[#2F5D5A]"
+              className="w-full bg-white border border-[#DCD6C8] rounded-xl px-3 py-2 text-sm text-[#1E2B22] focus:outline-none focus:ring-2 focus:ring-[#2A5C43] focus:border-transparent transition"
             />
           </div>
           <button
             type="submit"
-            className="bg-[#2F5D5A] text-white font-semibold text-sm px-5 py-2 rounded-full hover:bg-[#254B48] transition"
+            className="bg-[#2A5C43] hover:bg-[#1F4532] text-white font-semibold text-sm px-6 py-2.5 rounded-full shadow-md hover:shadow-lg transition cursor-pointer hover:scale-105 active:scale-100"
           >
             Submit
           </button>

@@ -1,5 +1,4 @@
 import User from "../models/user.model.js";
-import Caretaker from "../models/caretaker.model.js";
 import jwt from "jsonwebtoken";
 
 export const registerUser = async (req, res) => {
