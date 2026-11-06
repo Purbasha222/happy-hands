@@ -8,14 +8,6 @@ const shiftDefaults = {
   evening: { startTime: "17:00", endTime: "21:00" },
 };
 
-// Helper: combines a booking's endDate + endTime into one precise Date object
-const getBookingEndDateTime = (booking) => {
-  const end = new Date(booking.endDate);
-  const [hours, minutes] = booking.endTime.split(":").map(Number);
-  end.setHours(hours, minutes, 0, 0);
-  return end;
-};
-
 const getRange = (startDate, startTime, endDate, endTime) => {
   const start = new Date(startDate);
   const [sh, sm] = startTime.split(":").map(Number);
@@ -28,6 +20,9 @@ const getRange = (startDate, startTime, endDate, endTime) => {
   if (end <= start) end.setDate(end.getDate() + 1); // full-night
   return { start, end };
 };
+
+const getBookingEndDateTime = (b) =>
+  getRange(b.startDate, b.startTime, b.endDate, b.endTime).end;
 
 const autoCompleteExpiredBookings = async (filter = {}) => {
   const now = new Date();
@@ -63,6 +58,11 @@ export const createBooking = async (req, res) => {
       specialInstructions,
       caretakerId,
     } = req.body;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (new Date(startDate) < today || new Date(endDate) < new Date(startDate))
+      return res.status(400).json({ message: "Invalid dates." });
 
     const caretaker = await Caretaker.findById(caretakerId);
     if (!caretaker)
@@ -144,7 +144,7 @@ export const createBooking = async (req, res) => {
     const days =
       (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
 
-    const totalDays = shift === "full-night" ? days : days + 1;
+    const totalDays = shift === "full-night" ? Math.max(days, 1) : days + 1;
 
     const totalAmount =
       totalDays * (bookingType === "scheduled" ? dailyRate : urgentRate);
@@ -215,13 +215,29 @@ export const getCaretakerBookings = async (req, res) => {
 export const updateBookingStatus = async (req, res) => {
   try {
     const { status } = req.body;
-    const bookingId = req.params.id;
-    const booking = await Booking.findById(bookingId);
+    const booking = await Booking.findById(req.params.id);
 
     if (!booking)
       return res.status(404).json({ message: "Booking not found!" });
-    booking.status = status;
 
+    const caretaker = await Caretaker.findOne({ userId: req.user._id });
+    if (!caretaker || !booking.caretakerId.equals(caretaker._id))
+      return res.status(403).json({ message: "Not allowed" });
+
+    if (booking.status !== "pending")
+      return res
+        .status(400)
+        .json({ message: "Only pending bookings can be updated." });
+
+    // only the values your Accept / Decline buttons send
+    if (!["confirmed", "cancelled"].includes(status))
+      return res.status(400).json({ message: "Invalid status." });
+
+    // 1. save the booking FIRST
+    booking.status = status;
+    const updatedBookingStatus = await booking.save();
+
+    // 2. then cancel the others
     if (status === "confirmed") {
       const { start: confirmedStart, end: confirmedEnd } = getRange(
         booking.startDate,
@@ -269,9 +285,10 @@ export const updateBookingStatus = async (req, res) => {
         },
         { status: "auto-cancelled" },
       );
+
+      // 3. auto message goes here (your task)
     }
 
-    const updatedBookingStatus = await booking.save();
     return res.json({
       message: "Booking status updated!",
       updatedBookingStatus,
